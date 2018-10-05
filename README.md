@@ -5,13 +5,13 @@ environment variables. It basically exists because I kept copying the same
 utility code into my Golang libraries and applications and wanted to lib-ify
 this stuff instead of duplicating it.
 
-## XXXWithDefault Functions
+## WithDefault Functions
 
-There are a number of functions named `{Type}WithDefault()` which accept the
+There are a number of functions named `WithDefault{Type}()` which accept the
 key of an environment variable and a default value. The function checks to see
 if the environs contains the key and, if not, returns the default value. If the
 environs *does* contain the key, then the value of the environment variable
-with that key is transformed from a string to the `{Ttype}` mentioned in the
+with that key is transformed from a string to the `{Type}` mentioned in the
 function name.
 
 The functions and their signatures are as follows:
