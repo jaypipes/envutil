@@ -3,6 +3,7 @@ package envutil
 import (
 	"os"
 	"strconv"
+	"time"
 )
 
 // Returns the string value of the supplied environ variable or, if not
@@ -29,7 +30,7 @@ func WithDefaultInt(key string, def int) int {
 	return i
 }
 
-// Returns the boolvalue of the supplied environ variable or, if not present,
+// Returns the bool value of the supplied environ variable or, if not present,
 // the supplied default value. If the conversion fails, returns the default
 func WithDefaultBool(key string, def bool) bool {
 	val, ok := os.LookupEnv(key)
@@ -41,4 +42,18 @@ func WithDefaultBool(key string, def bool) bool {
 		return def
 	}
 	return b
+}
+
+// Returns the duration value of the supplied environ variable or, if not present,
+// the supplied default value. If the conversion fails, returns the default
+func WithDefaultDuration(key string, def time.Duration) time.Duration {
+	val, ok := os.LookupEnv(key)
+	if !ok {
+		return def
+	}
+	d, err := time.ParseDuration(val)
+	if err != nil {
+		return def
+	}
+	return d
 }

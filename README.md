@@ -25,7 +25,11 @@ The functions and their signatures are as follows:
 
 * `WithDefaultBool(key string, def bool) bool`: If `key` isn't found in the
   environ, returns `def`. If `key` is found, converts the environment variable
-  value to an `bool`. If the conversion fails, returns `def`.
+  value to a `bool`. If the conversion fails, returns `def`.
+
+* `WithDefaultDuration(key string, def time.Duration) time.Duration`: If `key` isn't found in the
+  environ, returns `def`. If `key` is found, converts the environment variable
+  value to a `time.Duration`. If the conversion fails, returns `def`.
 
 
 ```go
@@ -34,6 +38,7 @@ package main
 import (
     "fmt"
     "os"
+    "time"
 
     "github.com/jaypipes/envutil"
 )
@@ -71,6 +76,16 @@ func main() {
     os.Setenv("SOME_RANDOM_ENV_KEY", "false")
     boolval = envutil.WithDefaultBool("SOME_RANDOM_ENV_KEY", true)
     fmt.Printf(" WithDefaultBool(\"SOME_RANDOM_ENV_KEY\", true) returned %v\n", boolval)
+
+    fmt.Println(" Setting SOME_RANDOM_ENV_KEY to '30s'.")
+    os.Setenv("SOME_RANDOM_ENV_KEY", "30s")
+    durationval := envutil.WithDefaultDuration("SOME_RANDOM_ENV_KEY", 45 * time.Second)
+    fmt.Printf(" WithDefaultDuration(\"SOME_RANDOM_ENV_KEY\", 45 * time.Second) returned %v\n", durationval)
+
+    fmt.Println(" Setting SOME_RANDOM_ENV_KEY to 'not a duration'.")
+    os.Setenv("SOME_RANDOM_ENV_KEY", "not a duration")
+    durationval = envutil.WithDefaultDuration("SOME_RANDOM_ENV_KEY", 45 * time.Second)
+    fmt.Printf(" WithDefaultDuration(\"SOME_RANDOM_ENV_KEY\", 45 * time.Second) returned %v\n", durationval)
 }
 ```
 

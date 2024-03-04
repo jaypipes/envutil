@@ -3,6 +3,7 @@ package envutil_test
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jaypipes/envutil"
 )
@@ -121,6 +122,51 @@ func TestEnvOrDefaultBool(t *testing.T) {
 	os.Setenv(key, badval)
 
 	res = envutil.WithDefaultBool(key, defval)
+
+	if res != defval {
+		t.Errorf(
+			"Expected %v. Got %v.",
+			defval,
+			res,
+		)
+	}
+}
+
+func TestEnvOrDefaultDuration(t *testing.T) {
+	val := "30s"
+	badval := "not a duration"
+	durationval := 30 * time.Second
+	defval := 45 * time.Second
+	os.Setenv(key, val)
+
+	defer os.Unsetenv(key)
+
+	res := envutil.WithDefaultDuration(key, defval)
+
+	if res != durationval {
+		t.Errorf(
+			"Expected %v. Got %v.",
+			durationval,
+			res,
+		)
+	}
+
+	os.Unsetenv(key)
+
+	res = envutil.WithDefaultDuration(key, defval)
+
+	if res != defval {
+		t.Errorf(
+			"Expected %v. Got %v.",
+			defval,
+			res,
+		)
+	}
+
+	// Verify type conversion failure produces default value
+	os.Setenv(key, badval)
+
+	res = envutil.WithDefaultDuration(key, defval)
 
 	if res != defval {
 		t.Errorf(
